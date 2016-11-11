@@ -7,8 +7,15 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Launch Program",
-            "program": "${workspaceRoot}/index.js",
+            "name": "File Test",
+            "program": "${workspaceRoot}/file_test/index.js",
+            "cwd": "${workspaceRoot}"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Request Test",
+            "program": "${workspaceRoot}/request_test/index.js",
             "cwd": "${workspaceRoot}"
         }
     ]
