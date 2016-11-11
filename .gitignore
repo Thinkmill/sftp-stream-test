@@ -35,3 +35,6 @@ jspm_packages
 
 # Optional REPL history
 .node_repl_history
+
+# Our temporary download we don't care about.
+sftp_kitten.jpg
