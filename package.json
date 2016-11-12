@@ -4,7 +4,7 @@
   "description": "Testing the SFTP server",
   "main": "index.js",
   "scripts": {
-    "start": "node request_test/index.js && node file_test/index.js"
+    "start": "node request_test/index.js"
   },
   "author": "Kevin Brown",
   "license": "MIT",
