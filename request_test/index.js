@@ -1,7 +1,6 @@
 const exec = require('child_process').exec;
 const fs = require('fs');
 const request = require('request');
-const streamEqual = require('stream-equal');
 
 const server = require('./ftpServer');
 const config = require('./config');
@@ -14,21 +13,27 @@ server.create();
 server.start();
 
 // Download the cat directly with request:
+if (fs.existsSync('request_kitten.jpg')) {
+    fs.unlinkSync('request_kitten.jpg');
+}
+let localFile = fs.createWriteStream('request_kitten.jpg');
+
 console.log('Downloading kitten directly with request.');
 let requestStream;
 let requestPromise = new Promise((resolve, reject) => {
     request
         .get(config.IMAGE_URL)
         .on('response', (response) => {
-            requestStream = response;
-            resolve();
+            response.pipe(localFile);
         });
+    
+    localFile.on('close', resolve);
 });
 
 // Download from SFTP (piped via request):
 console.log('Downloading kitten from SFTP');
-if (fs.existsSync('kitten.jpg')) {
-    fs.unlinkSync('kitten.jpg');
+if (fs.existsSync('sftp_kitten.jpg')) {
+    fs.unlinkSync('sftp_kitten.jpg');
 }
 				
 let sftpStream;
@@ -42,12 +47,7 @@ let sftpPromise = new Promise((resolve, reject) => {
     });
 });
 
-// Compare
 Promise.all([requestPromise, sftpPromise]).then(() => {
-    streamEqual(sftpStream, requestStream, (err, equal) => {
-        if (err) console.log('Error: ' + JSON.stringify(err));
-
-        console.log(equal ? 'SUCCESS' : 'FAIL, streams are not equal.');
-        process.exit(0);
-    });
+    console.log('Downloaded both.');
+    process.exit(0);
 });
