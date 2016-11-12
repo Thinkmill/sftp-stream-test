@@ -1,6 +1,6 @@
 let config = {
     PORT: 7007,
-    IMAGE_URL: 'http://www.warrenphotographic.co.uk/photography/bigs/19634-Ginger-Maine-Coon-kitten-with-sombrero-hat-on-white-background.jpg',
+    IMAGE_URL: 'https://static.pexels.com/photos/7517/animal-sitting-animals-inside.jpg',
     IMAGE_PATH: '/kitten.jpg',
 };
 
