@@ -1,11 +1,9 @@
+const exec = require('child_process').exec;
+const fs = require('fs');
 const request = require('request');
 const streamEqual = require('stream-equal');
 
 const server = require('./ftpServer');
-
-const Client = require('ssh2-sftp-client');
-const client = new Client();
-
 const config = require('./config');
 
 console.log('================================');
@@ -29,17 +27,17 @@ let requestPromise = new Promise((resolve, reject) => {
 
 // Download from SFTP (piped via request):
 console.log('Downloading kitten from SFTP');
+if (fs.existsSync('kitten.jpg')) {
+    fs.unlinkSync('kitten.jpg');
+}
+				
 let sftpStream;
-let sftpPromise = client.connect({
-    host: 'localhost',
-    port: config.PORT,
-    username: config.USERNAME,
-    password: config.PASSWORD,
-}).then(() => {
-    return client.get(config.IMAGE_PATH);
-}).then((stream) => {
-    return new Promise((resolve, reject) => {
-        sftpStream = stream;
+let sftpPromise = new Promise((resolve, reject) => {
+    exec('sftp -P 7007 -b request_test/batch.sftp localhost', (error, stdout, stderr) => {
+        console.log('stdout: ', stdout);
+        console.error('stderr: ', stderr);
+        sftpStream = fs.createReadStream('kitten.jpg');
+
         resolve();
     });
 });
