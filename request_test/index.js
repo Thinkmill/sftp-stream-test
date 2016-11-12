@@ -36,12 +36,10 @@ if (fs.existsSync('sftp_kitten.jpg')) {
     fs.unlinkSync('sftp_kitten.jpg');
 }
 				
-let sftpStream;
 let sftpPromise = new Promise((resolve, reject) => {
     exec('sftp -P 7007 -b request_test/batch.sftp localhost', (error, stdout, stderr) => {
         console.log('stdout: ', stdout);
         console.error('stderr: ', stderr);
-        sftpStream = fs.createReadStream('kitten.jpg');
 
         resolve();
     });
